@@ -4,8 +4,8 @@ from mcpi import block
 
 class Minecraft:
 
-    def __init__(this):
-        this.mc = MC.create()
+    def __init__(this, mc):
+        this.mc = mc
     
     def getPlayerTile(this):
         return Tile(this.mc.player.getTilePos(), this.getCompass())
@@ -51,10 +51,14 @@ class Tile:
         return '(%d,%d,%d)' % (x,y,z)
 
     def right(this, distance):
-        if this.facing in ['n','s']:
+        if this.facing == 'n':
+            this.position.x = this.position.x - distance
+        elif this.facing == 's':
             this.position.x = this.position.x + distance
-        else:
+        elif this.facing == 'w':
             this.position.z = this.position.z + distance
+        elif this.facing == 'e':
+            this.position.z = this.position.z - distance
         return this
 
     def left(this, distance):
@@ -70,10 +74,14 @@ class Tile:
         return this
 
     def forwards(this, distance):
-        if this.facing in ['n','s']:
+        if this.facing == 'n':
             this.position.z = this.position.z + distance
-        else:
+        elif this.facing == 's':
+            this.position.z = this.position.z - distance
+        elif this.facing == 'w':
             this.position.x = this.position.x + distance
+        elif this.facing == 'e':
+            this.position.x = this.position.x - distance
         return this
 
     def backwards(this, distance):
