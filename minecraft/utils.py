@@ -26,10 +26,30 @@ class Minecraft:
         this.mc.setBlock(tile.toVec(), blockType)
 
     def setBlocks(this, fromTile, toTile, blockType):
-        if fromTile.facing in ['n','s']:
-            this.mc.setBlocks(toTile.toVec(), fromTile.toVec(), blockType)
-        else:
-            this.mc.setBlocks(fromTile.toVec(), toTile.toVec(), blockType)
+        this.mc.setBlocks(fromTile.toVec(), toTile.toVec(), blockType)
+
+    def getBlocks(this, fromTile, toTile):
+        fromTile = fromTile.toVec()
+        toTile = toTile.toVec()
+        blocks = []
+
+        zstep = 1 if toTile.z > fromTile.z else -1
+        ystep = 1 if toTile.y > fromTile.y else -1
+        xstep = 1 if toTile.x > fromTile.x else -1
+
+        for z in range(fromTile.z, toTile.z + 1, zstep):
+            square = []
+            for y in range(fromTile.y, toTile.y + 1, ystep):
+                line = []
+                for x in range(fromTile.z, toTile.z + 1, xstep):
+                    block = this.mc.getBlock(x,y,z)
+                    line.append(block)
+                square.append(line)
+            blocks.append(square)
+
+        return blocks
+            
+        
     
 class Tile:
     def __init__(this, position, facing):
