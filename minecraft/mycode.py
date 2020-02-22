@@ -30,6 +30,14 @@ def makePyramid(m, t, size, blockType):
         start.up(1).right(1).forward(1)
         end.up(1).left(1).back(1)
 
+def makeSwimmingPool(m, t, length, width, depth):
+    start = t.copy()
+    end = start.copy().right(width).forward(length).down(depth)
+    m.setBlocks(start, end, block.CLAY)
+    start.right(1).forward(1)
+    end.left(1).back(1).up(1)
+    m.setBlocks(start, end, block.WATER)
+
 
 
 
