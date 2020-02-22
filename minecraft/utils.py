@@ -28,27 +28,41 @@ class Minecraft:
     def setBlocks(this, fromTile, toTile, blockType):
         this.mc.setBlocks(fromTile.toVec(), toTile.toVec(), blockType)
 
-    def getBlocks(this, fromTile, toTile):
-        fromTile = fromTile.toVec()
-        toTile = toTile.toVec()
+    def copyBlocks(this, bottomLeftFrontTile, width, height, depth):
+        t = bottomLeftFrontTile.copy()
         blocks = []
-
-        zstep = 1 if toTile.z > fromTile.z else -1
-        ystep = 1 if toTile.y > fromTile.y else -1
-        xstep = 1 if toTile.x > fromTile.x else -1
-
-        for z in range(fromTile.z, toTile.z + 1, zstep):
+        for z in range(depth + 1):
             square = []
-            for y in range(fromTile.y, toTile.y + 1, ystep):
+            for y in range(height + 1):
                 line = []
-                for x in range(fromTile.z, toTile.z + 1, xstep):
-                    block = this.mc.getBlock(x,y,z)
+                for x in range(width + 1):
+                    block = this.mc.getBlock(t.toVec())
                     line.append(block)
+                    t.right(1)
                 square.append(line)
+                t.up(1)
+                t.left(width + 1)
             blocks.append(square)
+            t.forward(1)
+            t.down(height + 1)
 
         return blocks
             
+    def pasteBlocks(this, bottomLeftFrontTile, blocks):
+        t = bottomLeftFrontTile.copy()
+        for square in blocks:
+            height = 0
+            for line in square:
+                width = 0
+                for block in line:
+                    this.mc.setBlock(t.toVec(), block)
+                    t.right(1)
+                    width = width + 1
+                t.up(1)
+                t.left(width)
+                height = height + 1
+            t.forward(1)
+            t.down(height)
         
     
 class Tile:
@@ -93,7 +107,7 @@ class Tile:
         this.up(-distance)
         return this
 
-    def forwards(this, distance):
+    def forward(this, distance):
         if this.facing == 'n':
             this.position.z = this.position.z + distance
         elif this.facing == 's':
@@ -104,8 +118,8 @@ class Tile:
             this.position.x = this.position.x - distance
         return this
 
-    def backwards(this, distance):
-        this.forwards(-distance)
+    def back(this, distance):
+        this.forward(-distance)
         return this
 
     
