@@ -21,7 +21,7 @@ class Minecraft:
             return 's'
         if rotation >=225 and rotation < 315:
             return 'e'
-        
+
     def setBlock(this, tile, blockType):
         this.mc.setBlock(tile.toVec(), blockType)
 

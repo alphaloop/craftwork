@@ -1,5 +1,21 @@
 from mcpi import block
+from time import sleep
 
+def castFireBolt(m, distance):
+    b = m.getPlayerTile().forward(1)
+    for i in range(distance):
+        m.setBlock(b, block.FIRE)
+        sleep(0.05)
+        b.forward(1)
+    start = b.left(5).down(5)
+    end = b.copy().right(10).up(10).forward(10)
+    m.setBlocks(start, end, block.FIRE)
+
+def castMagicFireSpell(m, width, length, height):
+    start = m.getPlayerTile().left(width / 2)
+    end = start.copy().right(width).forward(length).up(height)
+    m.setBlocks(start, end, block.FIRE)
+    
 def makeTree(m, t, height):
     t = t.copy()
     for i in range(height):
