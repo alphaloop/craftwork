@@ -31,6 +31,8 @@ class Minecraft:
     def copyBlocks(this, bottomLeftFrontTile, width, height, depth):
         t = bottomLeftFrontTile.copy()
         blocks = []
+        progress = 0
+        total = width * depth * height
         for z in range(depth + 1):
             square = []
             for y in range(height + 1):
@@ -38,6 +40,8 @@ class Minecraft:
                 for x in range(width + 1):
                     block = this.mc.getBlock(t.toVec())
                     line.append(block)
+                    progress = progress + 1
+                    print("%d of %d" % (progress, total))
                     t.right(1)
                 square.append(line)
                 t.up(1)
