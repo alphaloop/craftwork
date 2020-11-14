@@ -6,6 +6,7 @@ def castFireBolt(m, distance):
     for i in range(distance):
         m.setBlock(b, block.FIRE)
         sleep(0.05)
+        m.setBlock(b, block.AIR)
         b.forward(1)
     start = b.left(5).down(5)
     end = b.copy().right(10).up(10).forward(10)
