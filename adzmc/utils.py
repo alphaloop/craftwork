@@ -133,20 +133,44 @@ class Tile:
 
 class MCImage:
 
+  def __init__(self, width, height, data, blockMap):
+      self.blockMap = blockMap
+      self.width = width
+      self.height = height
+      self.data = data
+      self.blockMap = blockMap
+
+  def render(self, m, startBlock, yInitFunction, yIncrementFunction):
+    b = startBlock.copy()
+    yInitFunction(b)
+    for y in range(self.height):
+      for x in range(self.width):
+        m.setBlock(b, self.data[x + (y * self.width)])
+        b.right(1)
+      b.left(self.width)
+      yIncrementFunction(b)
+
+  def renderFlat(self, m, topLeftBlock):
+    self.render(m, topLeftBlock, lambda b: None, lambda b: b.back(1))
+
+  def renderTall(self, m, bottomLeftBlock):
+    self.render(m, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
+
+class MCFileImage(MCImage):
+
   def __init__(self, filename):
-    self.colourBlockMap = { 
+    blockMap = { 
         0: block.Block(35, 15),
         1: block.Block(35, 7),
         2: block.Block(1),
         3: block.Block(35, 8),
         4: block.Block(35, 0)
     }
-    image = self.convertImageTo4LevelGreyscale(Image.open(filename))
-    self.width = image.size[0]
-    self.height = image.size[1]
-    self.data = self.convertImageToBlocks(image)
+    image = self.convertImageToGreyscale(Image.open(filename))
+    data = self.convertImageToBlocks(image, blockMap)
+    super().__init__(image.size[0], image.size[1], data, blockMap)
 
-  def convertImageTo4LevelGreyscale(self, image):
+  def convertImageToGreyscale(self, image):
 
     def snapTo5Levels(p):
       if p < 24:
@@ -162,27 +186,8 @@ class MCImage:
 
     return image.convert('L').point(snapTo5Levels)
 
-  def convertImageToBlocks(self, image):
+  def convertImageToBlocks(self, image, blockMap):
     data = []
     for p in list(image.getdata()):
-      data.append(self.colourBlockMap[p])
+      data.append(blockMap[p])
     return data
-
-  def renderFlat(self, m, topLeftBlock):
-    b = topLeftBlock.copy()
-    for y in range(self.height):
-      for x in range(self.width):
-        m.setBlock(b, self.data[x + (y * self.width)])
-        b.right(1)
-      b.left(self.width)
-      b.back(1)
-
-  def renderTall(self, m, bottomLeftBlock):
-    b = bottomLeftBlock.copy()
-    b.up(self.height)
-    for y in range(self.height):
-      for x in range(self.width):
-        m.setBlock(b, self.data[x + (y * self.width)])
-        b.right(1)
-      b.left(self.width)
-      b.down(1)
