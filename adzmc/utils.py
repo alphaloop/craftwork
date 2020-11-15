@@ -145,7 +145,7 @@ class MCImage:
     yInitFunction(b)
     for y in range(self.height):
       for x in range(self.width):
-        m.setBlock(b, self.data[x + (y * self.width)])
+        m.setBlock(b, self.blockMap[self.data[x + (y * self.width)]])
         b.right(1)
       b.left(self.width)
       yIncrementFunction(b)
@@ -168,7 +168,7 @@ class MCFileImage(MCImage):
         4: block.Block(35, 0)
     }
     image = self.convertImageToGreyscale(Image.open(filename))
-    data = self.convertImageToBlocks(image, blockMap)
+    data = list(image.getdata())
     super().__init__(image.size[0], image.size[1], data, blockMap)
 
   def convertImageToGreyscale(self, image):
@@ -186,9 +186,3 @@ class MCFileImage(MCImage):
         return 4
 
     return image.convert('L').point(snapTo5Levels)
-
-  def convertImageToBlocks(self, image, blockMap):
-    data = []
-    for p in list(image.getdata()):
-      data.append(blockMap[p])
-    return data

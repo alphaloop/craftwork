@@ -285,8 +285,8 @@ class Text:
   
   def __init__(self, textBlock):
     blockMap = {
-      _: block.AIR,
-      X: textBlock
+      0: block.AIR,
+      1: textBlock
     }
     self.createCharacterMap(blockMap)
 
