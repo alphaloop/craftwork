@@ -156,6 +156,7 @@ class MCImage:
   def renderTall(self, m, bottomLeftBlock):
     self.render(m, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
 
+
 class MCFileImage(MCImage):
 
   def __init__(self, filename):
