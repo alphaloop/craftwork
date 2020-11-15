@@ -283,10 +283,10 @@ CHARACTER_MAP = {
 
 class Text:
   
-  def __init__(self, textBlock):
+  def __init__(self, forgroundBlock, backgroundBlock):
     blockMap = {
-      0: block.AIR,
-      1: textBlock
+      0: backgroundBlock,
+      1: forgroundBlock
     }
     self.createCharacterMap(blockMap)
 
