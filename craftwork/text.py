@@ -1,7 +1,7 @@
-from adzmc import utils
+from . import images
 from mcpi import block
 
-flatten = lambda l: [item for sublist in l for item in sublist]
+_flatten = lambda l: [item for sublist in l for item in sublist]
 
 WIDTH = 8
 HEIGHT = 8
@@ -9,7 +9,7 @@ CHARSPACE = 1
 _ = 0
 X = 1
 CHARACTER_MAP = {
-  " ": flatten([
+  " ": _flatten([
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
@@ -19,7 +19,7 @@ CHARACTER_MAP = {
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
   ]),
-  "!": flatten([
+  "!": _flatten([
     [_,_,_,X,X,_,_,_],
     [_,_,_,X,X,_,_,_],
     [_,_,_,X,X,_,_,_],
@@ -29,7 +29,7 @@ CHARACTER_MAP = {
     [_,_,_,_,_,_,_,_],
     [_,_,_,X,X,_,_,_],
   ]),
-  ".": flatten([
+  ".": _flatten([
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
@@ -39,7 +39,7 @@ CHARACTER_MAP = {
     [_,_,_,X,X,_,_,_],
     [_,_,_,X,X,_,_,_],
   ]),
-  ",": flatten([
+  ",": _flatten([
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
@@ -49,7 +49,7 @@ CHARACTER_MAP = {
     [_,_,_,X,X,_,_,_],
     [_,_,X,X,_,_,_,_],
   ]),
-  "?": flatten([
+  "?": _flatten([
     [_,X,X,X,X,X,_,_],
     [X,_,_,_,_,_,X,_],
     [_,_,_,_,_,_,_,X],
@@ -59,7 +59,7 @@ CHARACTER_MAP = {
     [_,_,_,_,_,_,_,_],
     [_,_,_,X,_,_,_,_],
   ]),
-  "A": flatten([
+  "A": _flatten([
     [_,_,_,X,X,_,_,_],
     [_,_,X,_,_,X,_,_],
     [_,X,_,_,_,_,X,_],
@@ -69,7 +69,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X]
   ]),
-  "B": flatten([
+  "B": _flatten([
     [X,X,X,X,X,X,_,_],
     [X,_,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
@@ -79,7 +79,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,X,_],
     [X,X,X,X,X,X,_,_],
   ]),
-  "C": flatten([
+  "C": _flatten([
     [_,_,X,X,X,X,X,X],
     [_,X,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
@@ -89,7 +89,7 @@ CHARACTER_MAP = {
     [_,X,_,_,_,_,_,_],
     [_,_,X,X,X,X,X,X],
   ]),
-  "D": flatten([
+  "D": _flatten([
     [X,X,X,X,X,X,_,_],
     [X,_,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
@@ -99,7 +99,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,X,_],
     [X,X,X,X,X,X,_,_],
   ]),
-  "E": flatten([
+  "E": _flatten([
     [X,X,X,X,X,X,X,X],
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
@@ -109,7 +109,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,_],
     [X,X,X,X,X,X,X,X],
   ]),
-  "F": flatten([
+  "F": _flatten([
     [X,X,X,X,X,X,X,X],
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
@@ -119,7 +119,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
   ]),
-  "G": flatten([
+  "G": _flatten([
     [_,X,X,X,X,X,X,X],
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
@@ -129,7 +129,7 @@ CHARACTER_MAP = {
     [_,X,_,_,_,_,_,X],
     [_,_,X,X,X,X,X,X],
   ]),
-  "H": flatten([
+  "H": _flatten([
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
@@ -328,12 +328,12 @@ class Text:
       0: backgroundBlock,
       1: forgroundBlock
     }
-    self.createCharacterMap(blockMap)
+    self.create_character_map(blockMap)
 
-  def createCharacterMap(self, blockMap):
+  def create_character_map(self, blockMap):
     self.characterMap = dict()
     for key in CHARACTER_MAP.keys():
-      self.characterMap[key] = utils.MCImage(WIDTH, HEIGHT, CHARACTER_MAP[key], blockMap)
+      self.characterMap[key] = images.Image(WIDTH, HEIGHT, CHARACTER_MAP[key], blockMap)
   
   def render(self, m, startBlock, text):
     text = text.upper()

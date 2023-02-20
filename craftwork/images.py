@@ -1,0 +1,60 @@
+
+class Image:
+
+  def __init__(self, width, height, data, blockMap):
+      self.blockMap = blockMap
+      self.width = width
+      self.height = height
+      self.data = data
+      self.blockMap = blockMap
+
+  def render(self, m, startBlock, yInitFunction, yIncrementFunction):
+    b = startBlock.copy()
+    yInitFunction(b)
+    for y in range(self.height):
+      for x in range(self.width):
+        m.setBlock(b, self.blockMap[self.data[x + (y * self.width)]])
+        b.right(1)
+      b.left(self.width)
+      yIncrementFunction(b)
+
+  def render_flat(self, m, topLeftBlock):
+    self.render(m, topLeftBlock, lambda b: None, lambda b: b.back(1))
+
+  def render_tall(self, m, bottomLeftBlock):
+    self.render(m, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
+
+class Blockmap():
+
+  def __init__(self, blockmap):
+    self.blockmap = blockmap
+
+class FileImage(Image):
+
+  def __init__(self, filename):
+    blockMap = { 
+        0: block.Block(35, 15),
+        1: block.Block(35, 7),
+        2: block.Block(1),
+        3: block.Block(35, 8),
+        4: block.Block(35, 0)
+    }
+    image = self.convertImageToGreyscale(Image.open(filename))
+    data = list(image.getdata())
+    super().__init__(image.size[0], image.size[1], data, blockMap)
+
+  def convert_image_to_greyscale(self, image):
+
+    def snap_to_five_levels(p):
+      if p < 24:
+        return 0
+      elif p < 65:
+        return 1
+      elif p < 89:
+        return 2
+      elif p < 147:
+        return 3
+      else:
+        return 4
+
+    return image.convert('L').point(snap_to_five_levels)
