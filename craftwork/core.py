@@ -1,39 +1,20 @@
 from mcpi.vec3 import Vec3
-from mcpi.minecraft import Minecraft as MC
-from mcpi import block
-from PIL import Image
+from mcpi.minecraft import Minecraft
 
-class Minecraft:
+class Craftwork:
 
-    def __init__(self, mc):
-        self.mc = mc
+    def __init__(self):
+        self.mc = Minecraft.create()
     
-    def getPlayerTile(self):
-        return Tile(self.mc.player.getTilePos(), self.getCompass())
+    def get_player_block(self):
+        tile = self.mc.player.getTilePos()
+        return Block(self.mc, Position(tile.x, tile.y, tile.z), self.get_player_direction())
 
-    def getCompass(self):
-        x,y,z = self.mc.player.getTilePos()
-        rotation = self.mc.player.getRotation()
-        if rotation >= 315 or rotation < 45:
-            return 'n'
-        if rotation >= 45 and rotation < 135:
-            return 'w'
-        if rotation >=135 and rotation < 225:
-            return 's'
-        if rotation >=225 and rotation < 315:
-            return 'e'
+    def get_player_direction(self):
+        return Direction(self.mc.player.getRotation())
 
-    def setBlock(self, tile, blockType):
-        self.mc.setBlock(tile.toVec(), blockType)
-
-    def getBlockType(self, tile):
-        return self.mc.getBlock(tile.toVec())
-
-    def setBlocks(self, fromTile, toTile, blockType):
-        self.mc.setBlocks(fromTile.toVec(), toTile.toVec(), blockType)
-
-    def copyBlocks(self, bottomLeftFrontTile, width, height, depth):
-        t = bottomLeftFrontTile.copy()
+    def copyBlocks(self, bottomLeftFrontBlock, width, height, depth):
+        t = bottomLeftFrontBlock.copy()
         blocks = []
         progress = 0
         total = width * depth * height
@@ -56,8 +37,8 @@ class Minecraft:
 
         return blocks
             
-    def pasteBlocks(self, bottomLeftFrontTile, blocks):
-        t = bottomLeftFrontTile.copy()
+    def pasteBlocks(self, bottomLeftFrontBlock, blocks):
+        t = bottomLeftFrontBlock.copy()
         for square in blocks:
             height = 0
             for line in square:
@@ -72,25 +53,57 @@ class Minecraft:
             t.forward(1)
             t.down(height)
         
-    
-class Tile:
-    def __init__(self, position, facing):
-        if not isinstance(position, Vec3):
-            raise 'position must be a Vec3'
-        if not facing in ['n','s','e','w']:
-            raise 'invalid value for facing'
-        self.position = position
-        self.facing = facing
+class Position:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
 
-    def toVec(self):
-        return self.position
+    def toVec3(self):
+        return Vec3(self.x, self.y, self.z)
+    
+    def copy(self):
+        return Position(self.x, self.y, self.z)
+
+    def __eq__(self, rhs):
+        if not isinstance(rhs, Position):
+            return False
+        return self.x == rhs.x and self.y == rhs.y and self.z == rhs.z
+
+class Direction:
+    def __init__(self, rotation):
+        if rotation >= 315 or rotation < 45:
+            self.direction = 'n'
+        if rotation >= 45 and rotation < 135:
+            self.direction = 'w'
+        if rotation >=135 and rotation < 225:
+            self.direction = 's'
+        if rotation >=225 and rotation < 315:
+            self.direction = 'e'
+
+    def __eq__(self, rhs):
+        if isinstance(rhs, Direction):
+            return self.direction == rhs.direction
+        elif isinstance(rhs, str):
+            return self.direction == rhs
+        else:
+            return False
+        
+    def copy(self):
+        return Direction(self.direction)
+
+class Block:
+    def __init__(self, mc, position, direction):
+        self.mc = mc
+        if not isinstance(position, Position):
+            raise 'position must be an instance of Position'
+        if not isinstance(direction, Direction):
+            raise 'direction must be an instance of Direction'
+        self.position = position
+        self.facing = direction
 
     def copy(self):
-        return Tile(self.position.clone(), self.facing)
-
-    def __str__(self):
-        (x,y,z) = self.toVec()
-        return '(%d,%d,%d)' % (x,y,z)
+        return Block(self.mc, self.position.copy(), self.facing.copy())
 
     def right(self, distance):
         if self.facing == 'n':
@@ -130,59 +143,8 @@ class Tile:
         self.forward(-distance)
         return self
 
-
-class MCImage:
-
-  def __init__(self, width, height, data, blockMap):
-      self.blockMap = blockMap
-      self.width = width
-      self.height = height
-      self.data = data
-      self.blockMap = blockMap
-
-  def render(self, m, startBlock, yInitFunction, yIncrementFunction):
-    b = startBlock.copy()
-    yInitFunction(b)
-    for y in range(self.height):
-      for x in range(self.width):
-        m.setBlock(b, self.blockMap[self.data[x + (y * self.width)]])
-        b.right(1)
-      b.left(self.width)
-      yIncrementFunction(b)
-
-  def renderFlat(self, m, topLeftBlock):
-    self.render(m, topLeftBlock, lambda b: None, lambda b: b.back(1))
-
-  def renderTall(self, m, bottomLeftBlock):
-    self.render(m, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
-
-
-class MCFileImage(MCImage):
-
-  def __init__(self, filename):
-    blockMap = { 
-        0: block.Block(35, 15),
-        1: block.Block(35, 7),
-        2: block.Block(1),
-        3: block.Block(35, 8),
-        4: block.Block(35, 0)
-    }
-    image = self.convertImageToGreyscale(Image.open(filename))
-    data = list(image.getdata())
-    super().__init__(image.size[0], image.size[1], data, blockMap)
-
-  def convertImageToGreyscale(self, image):
-
-    def snapTo5Levels(p):
-      if p < 24:
-        return 0
-      elif p < 65:
-        return 1
-      elif p < 89:
-        return 2
-      elif p < 147:
-        return 3
-      else:
-        return 4
-
-    return image.convert('L').point(snapTo5Levels)
+    def getType(self):
+        return self.mc.getBlock(self.position.toVec3())
+    
+    def setType(self, block_type):
+        self.mc.setBlock(self.position.toVec3(), block_type)

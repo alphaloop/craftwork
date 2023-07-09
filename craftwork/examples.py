@@ -1,4 +1,6 @@
 from mcpi import block
+from mcpi import Minecraft
+from . import core
 from time import sleep
 
 def castFireBolt(m, distance):
@@ -49,3 +51,9 @@ def makeSwimmingPool(m, t, length, width, depth):
     start.right(1).forward(1)
     end.left(1).back(1).up(1)
     m.setBlocks(start, end, block.WATER)
+
+def run_examples():
+    mc = Minecraft.create()
+    cw = core.Craftwork(mc)
+    tile = cw.get_player_tile().forward(1)
+    makeForest(cw, tile, 10, 10, 10)

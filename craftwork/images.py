@@ -1,3 +1,4 @@
+import PIL
 
 class Image:
 
@@ -24,12 +25,7 @@ class Image:
   def render_tall(self, m, bottomLeftBlock):
     self.render(m, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
 
-class Blockmap():
-
-  def __init__(self, blockmap):
-    self.blockmap = blockmap
-
-class FileImage(Image):
+class GreyscaleFileImage(Image):
 
   def __init__(self, filename):
     blockMap = { 
@@ -39,11 +35,11 @@ class FileImage(Image):
         3: block.Block(35, 8),
         4: block.Block(35, 0)
     }
-    image = self.convertImageToGreyscale(Image.open(filename))
+    image = self._convertImageToGreyscale(PIL.Image.open(filename))
     data = list(image.getdata())
     super().__init__(image.size[0], image.size[1], data, blockMap)
 
-  def convert_image_to_greyscale(self, image):
+  def _convert_image_to_greyscale(self, image):
 
     def snap_to_five_levels(p):
       if p < 24:
