@@ -10,7 +10,7 @@ class Image:
       self.data = data
       self.blockMap = blockMap
 
-  def render(self, cw, startBlock, yInitFunction, yIncrementFunction):
+  def render(self, startBlock, yInitFunction, yIncrementFunction):
     b = startBlock.copy()
     yInitFunction(b)
     for y in range(self.height):
@@ -20,11 +20,11 @@ class Image:
       b.left(self.width)
       yIncrementFunction(b)
 
-  def render_flat(self, cw, topLeftBlock):
-    self.render(cw, topLeftBlock, lambda b: None, lambda b: b.back(1))
+  def render_flat(self, topLeftBlock):
+    self.render(topLeftBlock, lambda b: None, lambda b: b.back(1))
 
-  def render_tall(self, cw, bottomLeftBlock):
-    self.render(cw, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
+  def render_tall(self, bottomLeftBlock):
+    self.render(bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
 
 class GreyscaleFileImage(Image):
 

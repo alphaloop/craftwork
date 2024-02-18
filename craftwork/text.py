@@ -3,12 +3,12 @@ from mcpi import block
 
 _flatten = lambda l: [item for sublist in l for item in sublist]
 
-WIDTH = 8
-HEIGHT = 8
-CHARSPACE = 1
+_WIDTH = 8
+_HEIGHT = 8
+_CHARSPACE = 1
 _ = 0
 X = 1
-CHARACTER_MAP = {
+_CHARACTER_MAP = {
   " ": _flatten([
     [_,_,_,_,_,_,_,_],
     [_,_,_,_,_,_,_,_],
@@ -139,7 +139,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
   ]),
-  "I": flatten([
+  "I": _flatten([
     [X,X,X,X,X,X,X,X],
     [_,_,_,X,_,_,_,_],
     [_,_,_,X,_,_,_,_],
@@ -149,7 +149,7 @@ CHARACTER_MAP = {
     [_,_,_,X,_,_,_,_],
     [X,X,X,X,X,X,X,X],
   ]),
-  "J": flatten([
+  "J": _flatten([
     [_,X,X,X,X,X,X,X],
     [_,_,_,_,_,_,_,X],
     [_,_,_,_,_,_,_,X],
@@ -159,7 +159,7 @@ CHARACTER_MAP = {
     [_,_,_,_,_,_,X,_],
     [_,X,X,X,X,X,_,_],
   ]),
-  "K": flatten([
+  "K": _flatten([
     [X,_,_,_,_,X,_,_],
     [X,_,_,_,X,_,_,_],
     [X,_,_,X,_,_,_,_],
@@ -169,7 +169,7 @@ CHARACTER_MAP = {
     [X,_,_,_,X,_,_,_],
     [X,_,_,_,_,X,_,_],
   ]),
-  "L": flatten([
+  "L": _flatten([
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
@@ -179,7 +179,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,_],
     [X,X,X,X,X,X,X,X],
   ]),
-  "M": flatten([
+  "M": _flatten([
     [X,_,_,_,_,_,_,X],
     [X,X,_,_,_,_,X,X],
     [X,_,X,_,_,X,_,X],
@@ -189,7 +189,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
   ]),
-  "N": flatten([
+  "N": _flatten([
     [X,_,_,_,_,_,_,X],
     [X,X,_,_,_,_,_,X],
     [X,_,X,_,_,_,_,X],
@@ -199,7 +199,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,X,_,X],
     [X,_,_,_,_,_,X,X],
   ]),
-  "O": flatten([
+  "O": _flatten([
     [_,_,X,X,X,X,_,_],
     [_,X,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
@@ -209,7 +209,7 @@ CHARACTER_MAP = {
     [_,X,_,_,_,_,X,_],
     [_,_,X,X,X,X,_,_],
   ]),
-  "P": flatten([
+  "P": _flatten([
     [X,X,X,X,X,X,_,_],
     [X,_,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
@@ -219,7 +219,7 @@ CHARACTER_MAP = {
     [X,_,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
   ]),
-  "Q": flatten([
+  "Q": _flatten([
     [_,_,X,X,X,X,_,_],
     [_,X,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
@@ -229,7 +229,7 @@ CHARACTER_MAP = {
     [_,X,_,_,_,_,X,_],
     [_,_,X,X,X,X,_,X],
   ]),
-  "R": flatten([
+  "R": _flatten([
     [X,X,X,X,X,X,_,_],
     [X,_,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
@@ -239,7 +239,7 @@ CHARACTER_MAP = {
     [X,_,_,X,X,_,_,_],
     [X,_,_,_,_,X,X,X],
   ]),
-  "S": flatten([
+  "S": _flatten([
     [_,_,X,X,X,X,X,X],
     [_,X,_,_,_,_,_,_],
     [X,_,_,_,_,_,_,_],
@@ -249,7 +249,7 @@ CHARACTER_MAP = {
     [_,_,_,_,_,_,X,_],
     [X,X,X,X,X,X,_,_],
   ]),
-  "T": flatten([
+  "T": _flatten([
     [X,X,X,X,X,X,X,X],
     [_,_,_,X,_,_,_,_],
     [_,_,_,X,_,_,_,_],
@@ -259,7 +259,7 @@ CHARACTER_MAP = {
     [_,_,_,X,_,_,_,_],
     [_,_,_,X,_,_,_,_],
   ]),
-  "U": flatten([
+  "U": _flatten([
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
@@ -269,7 +269,7 @@ CHARACTER_MAP = {
     [_,X,_,_,_,_,X,_],
     [_,_,X,X,X,X,_,_],
   ]),
-  "V": flatten([
+  "V": _flatten([
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
@@ -279,7 +279,7 @@ CHARACTER_MAP = {
     [_,_,X,_,_,X,_,_],
     [_,_,_,X,X,_,_,_],
   ]),
-  "W": flatten([
+  "W": _flatten([
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
     [X,_,_,_,_,_,_,X],
@@ -289,7 +289,7 @@ CHARACTER_MAP = {
     [X,X,_,_,_,_,X,X],
     [X,_,_,_,_,_,_,X],
   ]),
-  "X": flatten([
+  "X": _flatten([
     [X,_,_,_,_,_,_,X],
     [_,X,_,_,_,_,X,_],
     [_,_,X,_,_,X,_,_],
@@ -299,7 +299,7 @@ CHARACTER_MAP = {
     [_,X,_,_,_,_,X,_],
     [X,_,_,_,_,_,_,X],
   ]),
-  "Y": flatten([
+  "Y": _flatten([
     [X,_,_,_,_,_,X,_],
     [_,X,_,_,_,X,_,_],
     [_,_,X,_,X,_,_,_],
@@ -309,7 +309,7 @@ CHARACTER_MAP = {
     [_,_,_,X,_,_,_,_],
     [_,_,_,X,_,_,_,_],
   ]),
-  "Z": flatten([
+  "Z": _flatten([
     [X,X,X,X,X,X,X,X],
     [_,_,_,_,_,_,X,_],
     [_,_,_,_,_,X,_,_],
@@ -323,23 +323,23 @@ CHARACTER_MAP = {
 
 class Text:
   
-  def __init__(self, forgroundBlock, backgroundBlock):
-    blockMap = {
-      0: backgroundBlock,
-      1: forgroundBlock
+  def __init__(self, forground_block, background_block):
+    block_map = {
+      0: background_block,
+      1: forground_block
     }
-    self.create_character_map(blockMap)
+    self.create_character_map(block_map)
 
-  def create_character_map(self, blockMap):
-    self.characterMap = dict()
-    for key in CHARACTER_MAP.keys():
-      self.characterMap[key] = images.Image(WIDTH, HEIGHT, CHARACTER_MAP[key], blockMap)
+  def create_character_map(self, block_map):
+    self.character_map = dict()
+    for key in _CHARACTER_MAP.keys():
+      self.character_map[key] = images.Image(_WIDTH, _HEIGHT, _CHARACTER_MAP[key], block_map)
   
-  def render(self, m, startBlock, text):
+  def render(self, start_block, text):
     text = text.upper()
-    b = startBlock.copy()
+    b = start_block.copy()
     for character in text:
-      charImage = self.characterMap[character]
-      if charImage:
-        charImage.renderTall(m, b)
-        b.right(WIDTH + CHARSPACE)
+      char_image = self.character_map[character]
+      if char_image:
+        char_image.render_tall(b)
+        b.right(_WIDTH + _CHARSPACE)
