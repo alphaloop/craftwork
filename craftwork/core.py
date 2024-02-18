@@ -35,26 +35,26 @@ class Craftwork:
         if not isinstance(bottomLeftFrontBlock, Block):
             raise CraftworkError('bottomLeftFrontBlock must be an instance of core.Block')
 
-        t = bottomLeftFrontBlock.copy()
+        b = bottomLeftFrontBlock.copy()
         blocks = []
         progress = 0
-        total = width * depth * height
+        total = (width+1) * (depth+1) * (height+1)
         for z in range(depth + 1):
             square = []
             for y in range(height + 1):
                 line = []
                 for x in range(width + 1):
-                    block = self._mc.getBlock(t.toVec())
+                    block = b.get_block_type()
                     line.append(block)
                     progress = progress + 1
                     print("%d of %d" % (progress, total))
-                    t.right(1)
+                    b.right(1)
                 square.append(line)
-                t.up(1)
-                t.left(width + 1)
+                b.up(1)
+                b.left(width + 1)
             blocks.append(square)
-            t.forward(1)
-            t.down(height + 1)
+            b.forward(1)
+            b.down(height + 1)
 
         return blocks
             
@@ -63,20 +63,20 @@ class Craftwork:
         if not isinstance(bottomLeftFrontBlock, Block):
             raise CraftworkError('bottomLeftFrontBlock must be an instance of core.Block')
 
-        t = bottomLeftFrontBlock.copy()
+        b = bottomLeftFrontBlock.copy()
         for square in blocks:
             height = 0
             for line in square:
                 width = 0
                 for block in line:
-                    self._mc.setBlock(t.toVec(), block)
-                    t.right(1)
+                    b.set_block_type(block)
+                    b.right(1)
                     width = width + 1
-                t.up(1)
-                t.left(width)
+                b.up(1)
+                b.left(width)
                 height = height + 1
-            t.forward(1)
-            t.down(height)
+            b.forward(1)
+            b.down(height)
         
 class Position:
     def __init__(self, x, y, z):
