@@ -11,15 +11,24 @@ class Craftwork:
     def get_player_block(self):
         try:
             tile = self._mc.player.getTilePos()
+            direction = self.get_player_direction()
         except:
-            raise CraftworkError('Error getting player position. Is there an active player?')
-        return Block(self._mc, Position(tile.x, tile.y, tile.z), self.get_player_direction())
+            raise CraftworkError('Error getting player position/direction. Is there an active player?')
+        return Block(self._mc, Position(tile.x, tile.y, tile.z), direction)
 
     def get_player_direction(self):
         return Direction(self._mc.player.getRotation())
     
     def get_block_at(self, x, y, z):
-        return self._mc.getBlock(Vec3(x,y,z))
+        try:
+            direction = self.get_player_direction()
+        except:
+            # No active player, use north
+            direction = Direction(0)
+        return Block(self._mc, Position(x, y, z), direction)
+
+    def set_blocks(self, bottomLeftFront, topRightBack, block_type):
+        self._mc.setBlocks(bottomLeftFront.position._toVec3(), topRightBack.position._toVec3(), block_type)
 
     def copy_blocks(self, bottomLeftFrontBlock, width, height, depth):
 
@@ -75,7 +84,7 @@ class Position:
         self.y = y
         self.z = z
 
-    def toVec3(self):
+    def _toVec3(self):
         return Vec3(self.x, self.y, self.z)
     
     def copy(self):
@@ -85,28 +94,35 @@ class Position:
         if not isinstance(rhs, Position):
             return False
         return self.x == rhs.x and self.y == rhs.y and self.z == rhs.z
+    
+    def __str__(self):
+        return '%d,%d,%d' % (self.x, self.y, self.z)
 
 class Direction:
     def __init__(self, rotation):
-        if rotation >= 315 or rotation < 45:
-            self.direction = 'n'
-        if rotation >= 45 and rotation < 135:
-            self.direction = 'w'
-        if rotation >=135 and rotation < 225:
-            self.direction = 's'
-        if rotation >=225 and rotation < 315:
-            self.direction = 'e'
+        self._rotation = rotation
 
     def __eq__(self, rhs):
         if isinstance(rhs, Direction):
-            return self.direction == rhs.direction
-        elif isinstance(rhs, str):
-            return self.direction == rhs
+            return self._rotation == rhs._rotation
         else:
             return False
-        
+    
+    def get_bearing(self):
+        if self._rotation >= 315 or self._rotation < 45:
+            return 'n'
+        if self._rotation >= 45 and self._rotation < 135:
+            return 'w'
+        if self._rotation >=135 and self._rotation < 225:
+            return 's'
+        if self._rotation >=225 and self._rotation < 315:
+            return 'e'
+
     def copy(self):
-        return Direction(self.direction)
+        return Direction(self._rotation)
+    
+    def __str__(self):
+        return self.get_bearing()
 
 class Block:
     def __init__(self, mc, position, direction):
@@ -122,13 +138,14 @@ class Block:
         return Block(self._mc, self.position.copy(), self.facing.copy())
 
     def right(self, distance):
-        if self.facing == 'n':
+        bearing = self.facing.get_bearing()
+        if bearing == 'n':
             self.position.x = self.position.x - distance
-        elif self.facing == 's':
+        elif bearing == 's':
             self.position.x = self.position.x + distance
-        elif self.facing == 'w':
+        elif bearing == 'w':
             self.position.z = self.position.z + distance
-        elif self.facing == 'e':
+        elif bearing == 'e':
             self.position.z = self.position.z - distance
         return self
 
@@ -145,13 +162,14 @@ class Block:
         return self
 
     def forward(self, distance):
-        if self.facing == 'n':
+        bearing = self.facing.get_bearing()
+        if bearing == 'n':
             self.position.z = self.position.z + distance
-        elif self.facing == 's':
+        elif bearing == 's':
             self.position.z = self.position.z - distance
-        elif self.facing == 'w':
+        elif bearing == 'w':
             self.position.x = self.position.x + distance
-        elif self.facing == 'e':
+        elif bearing == 'e':
             self.position.x = self.position.x - distance
         return self
 
@@ -160,10 +178,15 @@ class Block:
         return self
 
     def get_block_type(self):
-        return self._mc.getBlock(self.position.toVec3())
+        return self._mc.getBlock(self.position._toVec3())
     
     def set_block_type(self, block_type):
-        self._mc.setBlock(self.position.toVec3(), block_type)
+        self._mc.setBlock(self.position._toVec3(), block_type)
+
+    def __str__(self):
+        return '%s %s' % (self.position, self.facing)
+
+# TODO Properly wrap block type
 
 @dataclass
 class CraftworkError(BaseException):
