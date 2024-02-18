@@ -1,4 +1,5 @@
-import PIL
+from PIL import Image as PILImage
+from mcpi import block
 
 class Image:
 
@@ -9,21 +10,21 @@ class Image:
       self.data = data
       self.blockMap = blockMap
 
-  def render(self, m, startBlock, yInitFunction, yIncrementFunction):
+  def render(self, cw, startBlock, yInitFunction, yIncrementFunction):
     b = startBlock.copy()
     yInitFunction(b)
     for y in range(self.height):
       for x in range(self.width):
-        m.setBlock(b, self.blockMap[self.data[x + (y * self.width)]])
+        b.set_block_type(self.blockMap[self.data[x + (y * self.width)]])
         b.right(1)
       b.left(self.width)
       yIncrementFunction(b)
 
-  def render_flat(self, m, topLeftBlock):
-    self.render(m, topLeftBlock, lambda b: None, lambda b: b.back(1))
+  def render_flat(self, cw, topLeftBlock):
+    self.render(cw, topLeftBlock, lambda b: None, lambda b: b.back(1))
 
-  def render_tall(self, m, bottomLeftBlock):
-    self.render(m, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
+  def render_tall(self, cw, bottomLeftBlock):
+    self.render(cw, bottomLeftBlock, lambda b: b.up(self.height), lambda b: b.down(1))
 
 class GreyscaleFileImage(Image):
 
@@ -35,7 +36,7 @@ class GreyscaleFileImage(Image):
         3: block.Block(35, 8),
         4: block.Block(35, 0)
     }
-    image = self._convertImageToGreyscale(PIL.Image.open(filename))
+    image = self._convert_image_to_greyscale(PILImage.open(filename))
     data = list(image.getdata())
     super().__init__(image.size[0], image.size[1], data, blockMap)
 

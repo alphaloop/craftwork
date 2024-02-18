@@ -75,5 +75,5 @@ cw = core.Craftwork()
 block = cw.get_player_block().forward(5)
 
 # Plant a tree on that block
-core.examples.make_tree()
+core.examples.make_tree(cw, block)
 ```
