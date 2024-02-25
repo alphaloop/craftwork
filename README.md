@@ -3,11 +3,12 @@ Minecraft Python Library
 
 `craftwork` is a Python3 library that makes it easier to write code that does things in Minecraft. It uses the [mcpi](https://github.com/martinohanlon/mcpi) library under the covers, but provides a simpler interface and some useful tools to do stuff more easily.
 
-The main difference between `craftwork` and `mcpi` is that `craftwork` allows you to talk about blocks relative to where the player is looking, making it easier to think about the blocks your code is working on without having to keep track of coordinates.
+The main difference between `craftwork` and `mcpi` is that `craftwork` allows you to talk about blocks relative to where the player is looking, making it easier to think about the blocks your code is working on without having to keep track of coordinates. (You don't have to have a player connected to use `craftwork`: if you don't you can still manipulate blocks, but `craftwork` will behave as if you are facing north, unless you tell it otherwise.)
 
-You don't have to have a player connected to use `craftwork`: if you don't you can still manipulate blocks, but `craftwork` will behave as if you are facing north, unless you tell it otherwise.
+As well as a core module that allows you to more easily place blocks and copy and paste blocks relative to the players position, there are modules for rendering images as blocks and rendering simple text as blocks, as well as some examples.
 
 ![Example screenshot](https://private-user-images.githubusercontent.com/2895870/307599814-6ecdf0a1-352f-4eff-bbeb-f8dd9c6119d4.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDg4NzI4NDcsIm5iZiI6MTcwODg3MjU0NywicGF0aCI6Ii8yODk1ODcwLzMwNzU5OTgxNC02ZWNkZjBhMS0zNTJmLTRlZmYtYmJlYi1mOGRkOWM2MTE5ZDQucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI0MDIyNSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNDAyMjVUMTQ0OTA3WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MDFjMDVkNzE0YTNmOTg3ZGQ2YTU3MTg0YjFjMGU0NTEwNjRhZGMxOGUxNDYyMWY5ZmMxZGMwOTNlNjUzMWRjNiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QmYWN0b3JfaWQ9MCZrZXlfaWQ9MCZyZXBvX2lkPTAifQ.r__-JSiWbvoZbPtL_5YjPb5y75nRUEQhdP67u3TjcKg)
+An example of using the images module
 
 ## SetupCraftwork
 If you're new to programming Minecraft using Python, you'll need to setup a few things on your computer before you can start using this library.
